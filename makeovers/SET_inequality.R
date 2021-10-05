@@ -47,6 +47,3 @@ data %>%
     caption = "Data: https://www.advance-he.ac.uk/knowledge-hub/tags/reports"
   ) +
   theme(plot.title = element_markdown(lineheight = 1.1))
-
-
-
