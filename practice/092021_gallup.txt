@@ -1,0 +1,32 @@
+library("googlesheets4")
+library("dplyr")
+library("tidyr")
+library("ggplot2")
+library("ggthemes")
+
+gallup <- read_sheet("https://docs.google.com/spreadsheets/d/13Ks-X6fvf635BDakyYHuot_U6Y9tm4quJ0OgkARM3cc/edit#gid=0")
+
+gallup_reshaped <- gallup %>%
+  rename(dimension = 1) %>%
+  pivot_longer(2:4, names_to = "date") %>%
+  mutate(category = case_when(
+    dimension != "Favor" & dimension != "Oppose" ~ dimension,
+    dimension == "Favor" | dimension == "Oppose" ~ NA_character_,
+  )) %>% 
+  fill(category) %>% 
+  filter(!is.na(value)) %>% 
+  pivot_wider(names_from = dimension, values_from = value) %>% 
+  mutate(net_favourability = (Favor-Oppose)/100, date = factor(date, levels = c("Apr 2021", "May 2021", "Aug 2021")))
+
+gallup_reshaped %>%
+  ggplot(aes(x = category, y = net_favourability, fill = date)) +
+  geom_dotplot(binaxis='y', stackdir='center') +
+  scale_fill_manual(values=c("light grey", "light blue", "dark blue")) +
+  coord_flip() +
+  theme_fivethirtyeight() +
+  theme(legend.title = element_blank()) +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1L)) +
+  labs(
+    title = "Majorities of Americans now favor requiring\npeople to show proof of COVID-19 vaccination to\ntravel by airplane, stay in a hotel, attend events\nwith large crowds, dine in a restaurant and go\nto their office or work site",
+    subtitle = "Net favourability (% favour minus % oppose) of Americans when asked:\nWould you favor or oppose businesses requiring people to show\nproof of coronavirus/COVID-19 vaccination in order to do the\nfollowing over the next several months?"
+    )
