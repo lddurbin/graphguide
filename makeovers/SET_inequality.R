@@ -1,8 +1,10 @@
 library(dplyr, warn.conflicts = FALSE) # A Grammar of Data Manipulation
 library(ggplot2, warn.conflicts = FALSE) # Create Elegant Data Visualisations Using the Grammar of Graphics
 library(stringr, warn.conflicts = FALSE) # Simple, Consistent Wrappers for Common String Operations
-library(ggtext, warn.conflicts = FALSE) 
+library(ggtext, warn.conflicts = FALSE)
 library(showtext) # Using Fonts More Easily in R Graphs
+
+showtext::showtext_auto()
 
 data <- readxl::read_excel(here::here("makeovers/SET_equality.xlsx")) %>%
   janitor::clean_names() %>% 
@@ -28,9 +30,9 @@ stem_average <- data %>%
   with_groups(year, summarise, share = mean(share)) %>% 
   mutate(subject = "STEM subjects average")
 
-font_add_google("Source Sans Pro", "sourcesans")
+font_add_google("Roboto Condensed", "roboto")
 
-data %>% 
+p <- data %>% 
   bind_rows(stem_average) %>% 
   mutate(year = factor(year, levels = c("2011", "2016"))) %>% 
   ggplot(mapping = aes(x = reorder(subject, share), y = share, fill = year)) +
@@ -38,7 +40,7 @@ data %>%
   scale_fill_manual(values=c("#56B4E9", "#D55E00")) +
   geom_hline(yintercept = .5) +
   coord_flip() +
-  ggthemes::theme_fivethirtyeight(base_size = 11, base_family = "sourcesans") +
+  ggthemes::theme_clean(base_size = 11, base_family = "roboto") +
   theme(legend.title = element_blank()) +
   scale_y_continuous(labels = scales::label_percent(accuracy = 1L), breaks = c(.25, .5, .75)) +
   labs(
@@ -47,3 +49,7 @@ data %>%
     caption = "Data: https://www.advance-he.ac.uk/knowledge-hub/tags/reports"
   ) +
   theme(plot.title = element_markdown(lineheight = 1.1))
+
+ragg::agg_png("test.png", width = 1000, height = 1000, res = 150)
+print(p)
+invisible(dev.off())
