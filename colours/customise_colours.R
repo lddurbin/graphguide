@@ -10,7 +10,10 @@ worksheet.data <- read_csv(file = here::here("colours/CustomizeColorsWorksheet.c
 # Restructure the data.
 bardata <- worksheet.data %>% 
   pivot_longer(2:6, names_to = "variable") %>% 
-  mutate(description = factor(description, levels = c("I like exploring my data.", "I like working with Excel.", "I like talking about my data with others.", "I consider myself an Excel ninja.")))
+  mutate(
+    description = factor(description, levels = c("I like exploring my data.", "I like working with Excel.", "I like talking about my data with others.", "I consider myself an Excel ninja.")),
+    variable = factor(variable, levels = c("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree"))
+    )
 
 # Preview the first 10 observations with the head() function.
 head(bardata, n = 10)
@@ -29,7 +32,8 @@ barplot <- barplot +
     legend.text = element_text(size = 8),
     legend.key = element_blank(),
     axis.text.y = element_text(color = "black", size = 9, hjust = 1),
-    axis.text.x = element_text(color = "black", size = 9)
+    axis.text.x = element_text(color = "black", size = 9),
+    title = element_text(size = 15)
   ) +
   labs(x = "", y = "")
 
@@ -52,10 +56,11 @@ barplot <- barplot +
 
 # Apply color.
 barplot <- barplot +
-  scale_fill_manual(values = c("#004879","#00A2E0","#DBE48D","#F4900F","#951610"))
+  scale_fill_manual(values = c("#004879","#00A2E0","#DBE48D","#F4900F","#951610")) +
+  labs(title = "Most folks don't consider themselves to be Excel ninjas, but they still like\nexploring data!")
 
 # Display the final visualization.
 barplot
 
 # Export the file using the attributes of your choice.
-# ggsave(file = here::here("colours/stacked_bar_charts.png"), dpi = 150)
+ggsave(file = here::here("colours/stacked_bar_charts_corrected.png"), dpi = 150)
