@@ -1,0 +1,12 @@
+"condition","male","female"
+"Alzheimer's",0.02,0.047
+"Cancer",0.241,0.218
+"Diabetes",0.031,0.028
+"Flu & Pneumonia",0.02,0.023
+"Heart disease",0.246,0.229
+"Kidney Disease",0.018,0.018
+"Respiratory",0.054,0.06
+"Septicemia",0,0.015
+"Stroke",0.042,0.061
+"Suicide",0.025,0
+"Unintentional Injuries",0.063,0.037
