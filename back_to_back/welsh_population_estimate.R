@@ -39,9 +39,7 @@ welsh_pop <- bind_rows(males_2020, females_2020) %>%
       age >= 65 & age < 70 ~ "65-69",
       age >= 70 & age < 75 ~ "70-74",
       age >= 75 & age < 80 ~ "75-79",
-      age >= 80 & age < 85 ~ "80-84",
-      age >= 85 & age < 90 ~ "85-89",
-      age >= 90 ~ "90+",
+      age >= 80 ~ "80+"
     )
   ) %>% 
   with_groups(c(age_group, sex), summarise, population = sum(population)) %>% 
@@ -122,7 +120,7 @@ plot <- ggplot() +
   ) +
   labs(
     x = "HI",
-    title = "In 2020, there were fewer older <span style='color:orange'><strong>men</strong></span> living in Wales than older <span style='color:blue'><strong>women</strong></span>",
+    title = "Among the 80+ age group living in Wales in 2020, <span style='color:blue'><strong>women</strong></span> outnumbered<br><span style='color:orange'><strong>men</strong></span> by more than 30,000",
     caption = "Data: ONS (https://bit.ly/3lWgRou)"
     ) +
   scale_fill_manual(values = c(male = "orange", female = "blue")) +
