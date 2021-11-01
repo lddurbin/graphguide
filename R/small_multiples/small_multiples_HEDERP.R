@@ -44,39 +44,30 @@ employee_experience %>%
   scale_fill_manual(values = c("purple" = "#3B2883", "blue" = "#8EAEE8", "grey" = "#D8D8D8")) +
   facet_wrap(~Response) +
   coord_flip() +
-  scale_x_discrete(limits = axis_order$Question_Wording) +
+  scale_x_discrete(limits = axis_order$Question_Wording, labels = function(x) str_wrap(x, width = 18)) +
   geom_text(aes(
     group = Response,
     label = paste0(proportion, "%"),
     color = label_colour,
     y = label_position,
-    hjust = 0
+    hjust = 0,
+    size = 12
   ),
   position = position_nudge(x = 0, y = 2)) +
   scale_color_manual(values = c("white" = "white", "black" = "black")) +
   theme_minimal() +
   theme(
     legend.position = "none",
+    plot.title.position = "plot",
     axis.line = element_blank(),
     strip.background = element_blank(),
     panel.grid = element_blank(),
-    title = element_text(size = 14),
+    title = element_text(size = 16),
     axis.text.x = element_blank(),
     axis.title = element_blank(),
     panel.spacing = unit(3, "lines"),
-    axis.text.y = element_text(
-      face = "bold",
-      size = 10, 
-      color = "black",
-      margin = margin(
-        r = 15
-      )
-    ),
-    strip.text = element_text(
-      face = "bold", 
-      hjust = 0, 
-      size = 12
-    )
+    axis.text.y = element_text(size = 14, color = "black", margin = margin(r = 15)),
+    strip.text = element_text(size = 14)
   ) +
   labs(
     title = "Whilst higher education development staff enjoy the work\nthat they do, only half of them feel adequately paid",
