@@ -26,15 +26,23 @@ p_and_e <- data %>%
       local_board_region == "S" ~ "South"
     ),
     local_board_region = factor(local_board_region, levels = c("North & West", "Central & East", "South")),
-    perc = (external_agents/total)
+    perc = (external_agents/total),
+    label_distance = case_when(
+      total < 50 | (total < 100 & perc > .3) ~ total,
+      TRUE ~ external_agents
+      ),
+    label_colour = case_when(
+      total < 50 | (total < 100 & perc > .3) ~ "black",
+      TRUE ~ "white"
+    )
     )
 
 p_and_e %>% 
   ggplot() +
   geom_col(aes(x = reorder(local_board, total), y = total, fill = "All Events"), width = 3/4) +
   geom_col(aes(x = reorder(local_board, total), y = external_agents, fill = "Community-led Events"), width = 1/2) +
-  geom_text(aes(label = scales::percent(perc, accuracy = 1), x = reorder(local_board, perc), y = total), colour = "black", hjust = -0.3) +
-  facet_wrap(~local_board_region, ncol = 1, scales = "free") +
+  geom_text(aes(label = scales::percent(perc, accuracy = 1), x = reorder(local_board, perc), y = label_distance), colour = p_and_e$label_colour, hjust = -0.3) +
+  facet_wrap(~local_board_region, ncol = 1, scales = "free_y") +
   scale_fill_manual(values = c("All Events" = "dark grey", "Community-led Events" = "blue")) +
   coord_flip() +
   theme_minimal() +
