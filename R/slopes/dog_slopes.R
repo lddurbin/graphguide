@@ -44,10 +44,10 @@ ggplot(dog_changes) +
   ggthemes::theme_fivethirtyeight() +
   scale_x_continuous(breaks = c(0,1), limits = c(-0.5, 1.5), labels = c("2016", "2021")) +
   theme(
-    axis.text.y = element_blank(),
     plot.title = element_markdown(lineheight = 1.1),
     legend.position = "none",
     panel.grid.major.y = element_blank(),
     axis.line = element_blank(),
-    strip.text = element_text(size = 12, vjust = -0.8)
+    strip.text = element_blank(),
+    axis.text.y = element_text(hjust=2)
   )
