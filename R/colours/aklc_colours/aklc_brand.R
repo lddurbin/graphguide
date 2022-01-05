@@ -32,7 +32,7 @@ params <- tribble(
   0.83,                    1,                        0.9,               "#E76317",  "Sunset\nRest, horizon",            FALSE
 )
 
-img <- png::readPNG(here::here("R/colours/aklc.png"))
+img <- png::readPNG(here::here("R/colours/aklc_colours/aklc.png"))
 g <- grid::rasterGrob(img, width = .3, interpolate=TRUE)
 
 ggplot(df) +

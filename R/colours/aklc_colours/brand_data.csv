@@ -1,0 +1,17 @@
+xmin_coordinates_block,xmax_coordinates_block,x_coordinates_text,colour,block_text,palette
+0,0.17,0.075,#007CB9,"Shore
+Calm, sanctuary","Primary colour palette"
+0.2075,0.3775,0.295,#00304B,"Ocean
+Exploration, frontier","Primary colour palette"
+0.415,0.585,0.51,#F8F8F8,"Off white
+Being, balance","Primary colour palette"
+0,0.17,0.075,#6E963C,"Leaf
+Nature, sustainability","Secondary colour palette"
+0.2075,0.3775,0.295,#CC423E,"Nikau berry
+Allure, prominence","Secondary colour palette"
+0.415,0.585,0.51,#C0D67A,"Fields
+Growth, healing","Secondary colour palette"
+0.6225,0.7925,0.71,#87C9DD,"Sky
+Guidance, vision","Secondary colour palette"
+0.83,1,0.9,#E76317,"Sunset
+Rest, horizon","Secondary colour palette"
