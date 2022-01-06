@@ -12,9 +12,10 @@ text_block <- function(x_coordinates, text) {
 }
 
 grid <- tribble(~x, ~y, 0, 0, 1, 1)
-layout <- readr::read_csv(here::here("R/colours/aklc_colours/brand_data.csv"), col_types = "dddccc")
+layout <- readr::read_csv("brand_data.csv", col_types = "dddccc")
 
 ui <- fluidPage(
+  theme = bslib::bs_theme(bootswatch = "journal"),
   radioButtons("colour_level", label = "Primary or Secondary Colour Palette?", choices = c("Primary colour palette", "Secondary colour palette")),
   plotOutput("plot", width = "816px", height = "785px")
 )
@@ -22,7 +23,7 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   params <- reactive(layout %>% filter(palette == input$colour_level))
   
-  img <- png::readPNG(here::here("R/colours/aklc_colours/aklc.png"))
+  img <- png::readPNG("aklc.png")
   g <- grid::rasterGrob(img, width = .3, interpolate=TRUE)
   
   output$plot <- renderPlot({
