@@ -11,11 +11,16 @@ text_block <- function(x_coordinates, text) {
   geom_text(aes(x = x_coordinates, y = 0.625, label = text), family = "Arial", size = 5, vjust = -0.5)
 }
 
+colour_value <- function(x_coordinates, hex, bg_colour) {
+  geom_text(aes(x = x_coordinates, y = 0.8125, label = hex), family = "Arial", size = 5, colour = bg_colour)
+}
+
 grid <- tribble(~x, ~y, 0, 0, 1, 1)
-layout <- readr::read_csv("brand_data.csv", col_types = "dddccc")
+layout <- readr::read_csv("brand_data.csv", col_types = "dddcccc")
 
 ui <- fluidPage(
-  theme = bslib::bs_theme(bootswatch = "journal"),
+  titlePanel("Te Kunihera o Tāmaki Makaurau brand colours\nand their associations"),
+  
   radioButtons("colour_level", label = "Primary or Secondary Colour Palette?", choices = c("Primary colour palette", "Secondary colour palette")),
   plotOutput("plot", width = "816px", height = "785px")
 )
@@ -32,6 +37,7 @@ server <- function(input, output, session) {
       geom_text(aes(x = .175, y = 0.95, label = input$colour_level), size = 6, fontface = "bold") +
       pmap(list(params()$xmin_coordinates_block, params()$xmax_coordinates_block, params()$colour), colour_block) +
       pmap(list(params()$x_coordinates_text, params()$block_text), text_block) +
+      pmap(list(params()$x_coordinates_text, params()$colour, params()$bg_colour), colour_value) +
       scale_x_continuous(limits = c(0,1)) +
       scale_y_continuous(limits = c(0,1)) +
       ggthemes::theme_fivethirtyeight() +
@@ -41,8 +47,7 @@ server <- function(input, output, session) {
         plot.background = element_rect(fill = "white"),
         panel.grid.major = element_blank(),
         title = element_text(family = "Arial", size = 15)
-      ) +
-      labs(title = "Te Kunihera o Tāmaki Makaurau brand colours\nand their associations")
+      )
   })
 }
 
