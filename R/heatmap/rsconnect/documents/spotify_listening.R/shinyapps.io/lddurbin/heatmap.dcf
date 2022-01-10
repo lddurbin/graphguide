@@ -1,0 +1,13 @@
+name: heatmap
+title: heatmap
+username:
+account: lddurbin
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5415176
+bundleId: 5451221
+url: https://lddurbin.shinyapps.io/heatmap/
+when: 1641800456.17954
+lastSyncTime: 1641800456.17955
+asMultiple: FALSE
+asStatic: FALSE

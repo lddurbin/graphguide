@@ -5,10 +5,10 @@ account: lddurbin
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5400059
-bundleId: 5439274
+bundleId: 5448528
 url: https://lddurbin.shinyapps.io/aklc_colours/
-when: 1641448654.91459
-lastSyncTime: 1641448654.9146
+when: 1641696321.0333
+lastSyncTime: 1641696321.03331
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: aklc_brand_colours.png|aklc_brand.R|test.Rmd
+ignoredFiles: aklc_brand_colours.png|aklc_brand.R
