@@ -5,7 +5,7 @@ library(readr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 
 # Use the read.csv() function to import the file from the directory where it is located on your computer.
-data <- read_csv(here::here("legends/LineLabelsWorksheet.csv"))
+data <- read_csv(here::here("R/legends/LineLabelsWorksheet.csv"))
 
 # Use the melt() function to reformat the data, and assign the data to a new object.
 format_data <- data %>% pivot_longer(cols = 2:11, names_to = "variable")

@@ -4,7 +4,7 @@ library(readr, warn.conflicts = FALSE)
 library(dplyr, warn.conflicts = FALSE)
 library(ggtext, warn.conflicts = FALSE)
 
-data <- read_csv(here::here("legends/Population_by_Nationality.csv"))
+data <- read_csv(here::here("R/legends/Population_by_Nationality.csv"))
 
 format_data <- data %>% filter(Nationality %in% c("India", "China", "Philippines", "South Africa", "Great Britain"))
 

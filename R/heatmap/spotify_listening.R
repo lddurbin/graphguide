@@ -38,7 +38,7 @@ scrobble_summary <- scrobbles %>%
   filter(month != "Jan")
 
 ui <- fluidPage(
-  titlePanel("When am I listening to Spotify?"),
+  titlePanel("When did I listen to Spotify in 2021?"),
   radioButtons("plays_or_duration", label = "See number of plays or seconds spent listening?", choices = c("Number of plays", "Seconds spent listening"), width = "110%"),
   plotOutput("plot", width = "816px", height = "785px")
 )
