@@ -15,15 +15,19 @@ calculate_y_value <- function(metric, ethnicity) {
 }
 
 label_calc_left <- function(y_value, lag_value) {
-  min(covid_cases[[y_value]])-(min(covid_cases[[y_value]])-min(covid_cases[[lag_value]]))/2
+  diff <- ifelse(y_value == "european_or_other_y_value", 0.2, min(covid_cases[[y_value]])-min(covid_cases[[lag_value]]))
+  min(covid_cases[[y_value]])-(diff)/2
 }
 
 label_calc_right <- function(y_value, lag_value) {
-  max(covid_cases[[y_value]])-(max(covid_cases[[y_value]])-max(covid_cases[[lag_value]]))/2
+  diff <- ifelse(y_value == "european_or_other_y_value", 0.63, max(covid_cases[[y_value]])-max(covid_cases[[lag_value]]))
+  max(covid_cases[[y_value]])-(diff)/2
 }
 
-write_label <- function(ethnicity, percent) {
-  paste0(covid_ethnicity$prioritised_ethnicity[ethnicity], ": ", percent(covid_ethnicity$percentage_of_all_cases[percent]))
+write_label <- function(ethnicity, percent, side) {
+  ethnicity <- ifelse(ethnicity == 1, "European\nor Other", covid_ethnicity$prioritised_ethnicity[ethnicity])
+  value = ifelse(side == "left", covid_ethnicity$percentage_of_all_cases[percent], population_ethnicity$population[percent])
+  paste0(ethnicity, ": ", percent(value))
 }
 
 # https://github.com/minhealthnz/nz-covid-data
@@ -59,14 +63,12 @@ ggplot(covid_cases, aes(x = x_percent)) +
   theme_minimal() +
   theme(axis.text = element_blank(), axis.title = element_blank(), panel.grid = element_blank(), title = element_text(size=15)) +
   labs(
-    title = "The COVID-19 Delta outbreak in New Zealand has\ndisproportionately affected Māori and Pacifica populations",
-    caption = "COVID-19 cases since 16 August 2021 & NZ population data"
+    title = "The COVID-19 Delta outbreak in New Zealand has\ndisproportionately affected Māori and Pacifika populations",
+    caption = "COVID-19 community cases since 16 August 2021 & NZ population data"
   ) +
-  map2(ethnicities, c("#532476", "#7030a0", "#8a3cc4", "#9e5ece"), ~geom_area(aes(y = .data[[{{.x}}]]), fill = .y) ) +
-  map(ethnicities, ~geom_line(aes(y = .data[[{.x}]]), size = 5/4)) +
-  map(ethnicities, ~geom_segment(aes(x = -.18, xend = 0, y = min(.data[[{.x}]]), yend = min(.data[[{.x}]])), size = 5/4)) +
-  map(ethnicities, ~geom_segment(aes(x = 1, xend = 1.18, y = max(.data[[{.x}]]), yend = max(.data[[{.x}]])), size = 5/4)) +
-  pmap(list(ethnicities[1:3], ethnicities[2:4], c(4,3,2)), ~geom_text(aes(x = -.09, y = label_calc_left(..1, ..2), label = write_label(..3, ..3)))) +
-  geom_text(aes(x = -.09, y = min(european_or_other_y_value)/2, label = paste0("European or\nother: ", percent(covid_ethnicity$percentage_of_all_cases[1])))) +
-  pmap(list(ethnicities[1:3], ethnicities[2:4], c(4,3,2), c(3,4,1)), ~geom_text(aes(x = 1.09, y = label_calc_right(..1, ..2), label = write_label(..3, ..4)))) +
-  geom_text(aes(x = 1.09, y = max(european_or_other_y_value)/2, label = paste0("European or\nother: ", percent(population_ethnicity$population[2]))))
+  map2(ethnicities, c("#532476", "#7030a0", "#8a3cc4", "#9e5ece"), ~geom_area(aes(y = .data[[{{.x}}]]), fill = .y) ) + # plot areas
+  map(ethnicities, ~geom_line(aes(y = .data[[{.x}]]), size = 5/4)) + # add line above each area
+  map(ethnicities, ~geom_segment(aes(x = -.18, xend = 0, y = min(.data[[{.x}]]), yend = min(.data[[{.x}]])), size = 5/4)) + # extend the lines to the left
+  map(ethnicities, ~geom_segment(aes(x = 1, xend = 1.18, y = max(.data[[{.x}]]), yend = max(.data[[{.x}]])), size = 5/4)) + # extend the lines to the right
+  pmap(list(ethnicities, c(ethnicities[2:4], ""), c(4,3,2,1)), ~geom_text(aes(x = -.09, y = label_calc_left(..1, ..2), label = write_label(..3, ..3, "left")))) + # add labels on the left
+  pmap(list(ethnicities, c(ethnicities[2:4], ""), c(4,3,2,1), c(3,4,1,2)), ~geom_text(aes(x = 1.09, y = label_calc_right(..1, ..2), label = write_label(..3, ..4, "right")))) # add labels on the right
