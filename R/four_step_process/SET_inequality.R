@@ -6,7 +6,7 @@ library(showtext) # Using Fonts More Easily in R Graphs
 
 showtext::showtext_auto()
 
-data <- readxl::read_excel(here::here("makeovers/SET_equality.xlsx")) %>%
+data <- readxl::read_excel(here::here("R/four_step_process/SET_equality.xlsx")) %>%
   janitor::clean_names() %>% 
   filter(set == 1 & gender == "Female" & !str_starts(subject, "Anatomy") & (year == 2016 | year == 2011)) %>% 
   mutate(measure = str_to_lower(measure), subject = case_when(
