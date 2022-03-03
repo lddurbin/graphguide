@@ -1,14 +1,6 @@
-# devtools::install_github("ramnathv/rCharts")
-library(rCharts)
+library(rCharts) # Interactive Charts using Javascript Visualization Libraries
 library(dplyr) # A Grammar of Data Manipulation
-library(janitor) # Simple Tools for Examining and Cleaning Dirty Data
-library(lubridate) # Make Dealing with Dates a Little Easier
-library(tidyr) # Tidy Messy Data
 library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
-library(purrr) # Functional Programming Tools
-library(stringr) # Simple, Consistent Wrappers for Common String Operations
-
-sankey_diagram <- rCharts$new()
 
 drwho <- readRDS("R/sankey/doctorwho.rds") %>% 
   filter(type == "episode" & season_number != 13) %>% 
@@ -22,7 +14,16 @@ drwho <- readRDS("R/sankey/doctorwho.rds") %>%
     TRUE ~ ""
   )) %>% 
   with_groups(doctor, mutate, number = sequence(n()) %>% as.character()) %>% 
+  mutate(number = case_when(
+    number == 1 ~ "First Season",
+    number == 2 ~ "Second Season",
+    number == 3 ~ "Third Season"
+  )) %>%
   select(source = doctor, target = number, value = viewers)
+
+sankey_diagram <- rCharts$new()
+
+sankey_diagram$setLib('http://timelyportfolio.github.io/rCharts_d3_sankey')
 
 sankey_diagram$set(
   data = drwho,
