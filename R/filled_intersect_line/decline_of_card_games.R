@@ -74,7 +74,7 @@ ggplot(final_data, aes(x = date)) +
   scale_x_date(date_breaks = "5 years", date_labels = "%Y") +
   theme_minimal() +
   theme(
-    panel.grid.major = element_blank(),
+    panel.grid.major.x = element_blank(),
     panel.grid.minor = element_blank(),
     axis.title = element_blank(),
     axis.text = element_text(size = 12),

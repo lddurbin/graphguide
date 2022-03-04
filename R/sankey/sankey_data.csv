@@ -1,0 +1,26 @@
+"source","target","value"
+"Rose","Rent",100
+"Dorothy","Rent",150
+"Blanche","Rent",100
+"Sophia","Rent",75
+"Rose","Groceries",40
+"Dorothy","Groceries",40
+"Blanche","Groceries",60
+"Sophia","Groceries",25
+"Rose","Netflix",0
+"Dorothy","Netflix",0
+"Blanche","Netflix",5
+"Sophia","Netflix",5
+"Rose","Utilities",50
+"Dorothy","Utilities",50
+"Blanche","Utilities",50
+"Sophia","Utilities",30
+"Rose","Housekeeping",25
+"Dorothy","Housekeeping",25
+"Blanche","Housekeeping",25
+"Sophia","Housekeeping",15
+"Rose","St Olaf Children's Choir",100
+"Rose","Pool",10
+"Dorothy","Pool",10
+"Blanche","Pool",10
+"Sophia","Pool",10
