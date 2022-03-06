@@ -1,8 +1,8 @@
 library(dplyr) # A Grammar of Data Manipulation
 library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
-library(ggforce)
-library(purrr)
-library(magick)
+library(ggforce) # Accelerating 'ggplot2'
+library(purrr) # Functional Programming Tools
+library(magick) # Advanced Graphics and Image-Processing in R
 
 directory <- here::here("R/comets")
 
@@ -15,6 +15,8 @@ physical_checkouts <- readr::read_csv(fs::dir_ls(directory, glob = "*.csv"), col
   select(-c(financial_year, month)) %>% 
   tidyr::pivot_wider(names_from = date, values_from = sum_of_checkouts_actual) %>% 
   mutate(colour = if_else(jan_2018 > jan_2022, "decrease", "increase"))
+
+# Make the comet plot
 
 plot <- ggplot(physical_checkouts) +
   geom_link(aes(x = jan_2018, xend = jan_2022, y = reorder(location_name, jan_2022), yend = reorder(location_name, jan_2022), size = stat(index), color = colour), lineend = "round") +
@@ -49,29 +51,21 @@ ggsave(filename = paste0(directory, "/Comet_PNG_version.png"), plot = plot,
        height = 12, width = 8, units = "in", dpi = 300)
 
 # Make an inset plot that we'll use for our key
-
 inset_plot <- ggplot(data = tibble(x = seq(1:10), y = seq(1:10))) +
   geom_link(aes(x = 1, xend = 2, y = 2, yend = 2, size = stat(index)), lineend = "round", colour = "#ADD8E6") +
   geom_point(aes(x = 2, y = 2), shape = 21, fill = "white", size = 4.5, stroke = 0) +
   scale_x_continuous(limits = c(0.7,2.3)) +
   scale_y_continuous(limits = c(1.5,3.2)) +
-  annotate(geom = "text", x = 1.5, y = 3, label = "Key", size = 9) +
-  annotate(geom = "text", x = 1, y = 2.5, label = "January\n2018", size = 6) +
-  annotate(geom = "text", x = 2, y = 2.5, label = "January\n2022", size = 6) +
+  pmap(list(c(1.5,1,2), c(3,2.5,2.5), c("Key", "January\n2018", "January\n2022"), c(9,6,6)), ~annotate(geom = "text", x = ..1, y = ..2, label = ..3, size = ..4)) +
   theme_void() +
   theme(
     legend.position = "none",
     plot.background = element_rect(size=1, fill = 'floralwhite', color = "black")
     )
 
-# Save our inset plot -- we'll use this later
 ggsave(filename = paste0(directory, "/Inset.png"),  inset_plot, w = 4, h = 2, units = "in", dpi = 200, type = "cairo")
 
-# Read in Inset plot
 inset <- image_read(paste0(directory, "/Inset.png"))
-
-# Read in Comet plot
 graf <- image_read(paste0(directory, "/Comet_PNG_version.png"))
-
-# Layer Inset plot on top of Comet plot
 image_composite(graf, inset, offset = "+1400+3000") %>% image_write(paste0(directory, "/Comet_plot.png"))
+
