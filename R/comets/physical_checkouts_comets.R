@@ -17,7 +17,6 @@ physical_checkouts <- readr::read_csv(fs::dir_ls(directory, glob = "*.csv"), col
   mutate(colour = if_else(jan_2018 > jan_2022, "decrease", "increase"))
 
 # Make the comet plot
-
 plot <- ggplot(physical_checkouts) +
   geom_link(aes(x = jan_2018, xend = jan_2022, y = reorder(location_name, jan_2022), yend = reorder(location_name, jan_2022), size = stat(index), color = colour), lineend = "round") +
   map(
@@ -46,9 +45,6 @@ plot <- ggplot(physical_checkouts) +
   labs(
     title = "In January 2022, only one of Auckland's public libraries experienced an\nincrease in physical checkouts compared to four years previously"
   )
- 
-ggsave(filename = paste0(directory, "/Comet_PNG_version.png"), plot = plot,
-       height = 12, width = 8, units = "in", dpi = 300)
 
 # Make an inset plot that we'll use for our key
 inset_plot <- ggplot(data = tibble(x = seq(1:10), y = seq(1:10))) +
@@ -63,9 +59,9 @@ inset_plot <- ggplot(data = tibble(x = seq(1:10), y = seq(1:10))) +
     plot.background = element_rect(size=1, fill = 'floralwhite', color = "black")
     )
 
+ggsave(filename = paste0(directory, "/Comet_PNG_version.png"), plot = plot, height = 12, width = 8, units = "in", dpi = 300)
 ggsave(filename = paste0(directory, "/Inset.png"),  inset_plot, w = 4, h = 2, units = "in", dpi = 200, type = "cairo")
 
 inset <- image_read(paste0(directory, "/Inset.png"))
 graf <- image_read(paste0(directory, "/Comet_PNG_version.png"))
 image_composite(graf, inset, offset = "+1400+3000") %>% image_write(paste0(directory, "/Comet_plot.png"))
-
