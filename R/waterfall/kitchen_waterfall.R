@@ -49,9 +49,10 @@ ggplot(
     panel.grid = element_blank(),
     axis.title = element_blank(),
     legend.position = "none",
-    axis.text = element_text(size = 12),
+    axis.text.y = element_text(size = 12),
+    axis.text.x = element_blank(),
     plot.title.position = "plot",
-    title = element_text(size = 14)
+    title = element_text(size = 14),
   ) +
   labs(
     title = "It took more than twice as many days as planned to complete our kitchen renovation"
