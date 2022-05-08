@@ -39,7 +39,7 @@ facilities_boxes <- facilities |>
   mutate(facilities_total = n()) |> 
   filter_and_count(governance_model, "Connected Communities", "have_a_Connected_Communities_governance_model") |> 
   filter_and_count(delivery_model, "Community led", "are_community_led") |> 
-  filter_and_count(ownership, "Council-owned", "are_Council_owned") |> 
+  filter_and_count(ownership, "Council-owned", "are_\n_Council_owned") |> 
   distinct(across(-c(facility_name:ownership))) |> 
   pivot_longer(everything(), names_to = "category", values_to = "value") |> 
   mutate(prior_response = lag(value), total_facilities = 292, tile_number = row_number()-1) |> 
@@ -54,7 +54,7 @@ facilities_boxes <- facilities |>
     facilities_count = paste0("(",value, " out of ", prior_response," facilities", ")")
   )
 
-ggplot() +
+plot <- ggplot() +
   geom_rect(aes(xmin = 0, xmax = 1, ymin = 0, ymax = 1), fill = "#1a5ea9") +
   pmap(
     list(
@@ -68,15 +68,24 @@ ggplot() +
   ) +
   pmap(
     list(
-      c(rep(0.05, 3), 0.33, rep(0.18, 2)),
-      rep(facilities_boxes$y_height-0.05, 2),
-      c(facilities_boxes$percent, facilities_boxes$category),
-      c(rep(9, 3), rep(5, 3))
+      c(rep(0.015, 4), 0.07, rep(0.08, 3)),
+      c(0.95, facilities_boxes$y_height-0.05, 0.95, facilities_boxes$y_height-0.05),
+      c("292", facilities_boxes$percent, " public facilities", paste0("of those ", facilities_boxes$category)),
+      c(rep(9, 4), rep(5, 4))
     ),
-    ~annotate("text", x = ..1, y = ..2, label = ..3, size = ..4, colour = "white")
+    ~annotate("text", x = ..1, y = ..2, label = ..3, size = ..4, colour = "white", hjust = 0)
   ) +
-  theme_void() +
-  theme(title = element_text(size=18)) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size=20, hjust = 0.45, vjust = -0.55),
+    plot.background = element_rect(colour = "white"),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank()
+    ) +
   labs(
-    title = "How are our facilities governed, led, and owned?"
+    title = "Despite its aspirations for the community, Auckland Council still governs and owns most of its facilities"
   )
+
+ggsave("aklc_facilities.png", plot = plot, device = "png", path = path)
