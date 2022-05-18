@@ -1,15 +1,22 @@
 library(dplyr) # A Grammar of Data Manipulation
 library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
-library(sp) # Classes and Methods for Spatial Data
-library(rgdal) # Bindings for the 'Geospatial' Data Abstraction Library
+library(rnaturalearth) # World Map Data from Natural Earth
+library(sf) # Simple Features for R
 
-# facilities <- readr::read_csv("R/maps/Connected Communities Service Status Update Board.csv", col_select = c(1:3, 15:16), col_types = "cccdd", name_repair = janitor::make_clean_names)
-# 
-# coordinates(facilities) <- c("lat", "long")
-# 
-# writeOGR(facilities, "R/maps", "ac_facilities", driver = "ESRI Shapefile")
+world <- ne_countries(scale = "medium", returnclass = "sf")
 
-facilities_sp <- readOGR("R/maps/", "ac_facilities")
+data <- readr::read_csv(
+  "R/maps/Connected Communities Service Status Update Board.csv",
+  col_select = c(1:3, 15:16),
+  col_types = "cccdd",
+  name_repair = janitor::make_clean_names
+  )
 
-plot(facilities_sp)
+(sites <- st_as_sf(data, coords = c("long", "lat"), 
+                   crs = 4326, agr = "constant"))
+
+ggplot(data = world) +
+  geom_sf() +
+  geom_sf(data = sites, aes(fill = current_service_level), size = 2, shape = 23) +
+  coord_sf(xlim = c(174, 175.8), ylim = c(-36.1, -37.3), expand = FALSE)
 
