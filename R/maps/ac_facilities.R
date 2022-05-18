@@ -3,7 +3,7 @@ library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graph
 library(rnaturalearth) # World Map Data from Natural Earth
 library(sf) # Simple Features for R
 
-world <- ne_countries(scale = "medium", returnclass = "sf")
+world <- ne_countries(scale = "large", returnclass = "sf")
 
 data <- readr::read_csv(
   "R/maps/Connected Communities Service Status Update Board.csv",
