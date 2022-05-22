@@ -19,4 +19,3 @@ ggplot(data = world) +
   geom_sf() +
   geom_sf(data = sites, aes(fill = current_service_level), size = 2, shape = 23) +
   coord_sf(xlim = c(174, 175.8), ylim = c(-36.1, -37.3), expand = FALSE)
-

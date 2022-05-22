@@ -31,7 +31,7 @@ eurovision <- eurovision_df |>
   ) |> 
   filter(!is.na(total_points) & !is.na(points_2022))
 
-ggplot(eurovision) +
+plot <- ggplot(eurovision) +
   theme_void() +
   geom_area(
     aes(x = year, y = total_points), 
@@ -53,10 +53,13 @@ ggplot(eurovision) +
   ) +
   labs(
     title = "Scorecards for the Eurovision 2022 Finalists",
-    caption = "Points awarded to each country who competed in the 2022 Eurovision Grand Final"
+    caption = "Points awarded over time to each country whose artists competed in the 2022 Eurovision Grand Final"
   ) +
   theme(
     strip.text = element_text(size=12),
     legend.position = "none",
-    plot.title = element_text(size=24, margin = margin(0.5,0,0.5,0.5, unit = "cm"))
+    plot.title = element_text(size=24, margin = margin(0.5,0,0.5,0.5, unit = "cm")),
+    plot.margin=unit(rep(0.3,4), 'cm')
   )
+
+ggsave("eurovision_BANs.png", plot = plot, device = "png", path = path, bg = "white")
