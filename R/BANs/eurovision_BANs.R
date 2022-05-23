@@ -21,26 +21,33 @@ eurovision_2022 <- eurovision_df |>
 
 eurovision <- eurovision_df |> 
   left_join(eurovision_2022) |> 
+  with_groups(artist_country, mutate, mid_points = max(total_points)/2) |> 
   mutate(
     year = lubridate::as_date(paste0(year, "01", "01")),
     earliest_year = round((interval(min(year), max(year)) / years(1))/2,0),
     x_pos = min(year)+years(earliest_year),
     y_pos = max(total_points, na.rm = TRUE)*1.5,
     yoy_perc_2022_formatted = scales::label_percent(accuracy = 1, big.mark = ",")(yoy_perc_2022),
-    yoy_perc_2022_formatted = if_else(yoy_perc_2022_formatted == Inf, "", paste0("YoY: ", yoy_perc_2022_formatted))
+    yoy_perc_2022_formatted = if_else(yoy_perc_2022_formatted == Inf, "", paste0("YoY: ", yoy_perc_2022_formatted)),
+    area_fill = case_when(
+      artist_country == "Ukraine" ~ "yellow",
+      TRUE ~ "blue"
+    ),
+    rect_fill = if_else(artist_country == "Ukraine", TRUE, FALSE)
   ) |> 
   filter(!is.na(total_points) & !is.na(points_2022))
 
 plot <- ggplot(eurovision) +
   theme_void() +
+  geom_rect(aes(xmin = min(year), xmax = max(year), ymin = 0, ymax = y_pos, fill = rect_fill)) +
   geom_area(
-    aes(x = year, y = total_points), 
-    group = 1, 
-    fill = "gray"
+    aes(x = year, y = total_points, fill = area_fill), 
+    group = 1
   ) +
+  scale_fill_manual(values = c("grey", "white", "blue", "yellow")) +
   facet_wrap(vars(artist_country)) +
   geom_text(
-    aes(x = x_pos, y = y_pos, label = points_2022), 
+    aes(x = x_pos, y = y_pos*0.95, label = points_2022, colour = if_else(artist_country == "Ukraine", "white", "black")), 
     size = 8, vjust = 1
   ) +
   geom_text(
@@ -51,6 +58,7 @@ plot <- ggplot(eurovision) +
       colour = if_else(yoy_perc_2022 < 0, "deepskyblue", "red")),
     size = 5,
   ) +
+  scale_colour_manual(values = c("black", "red", "deepskyblue", "white")) +
   labs(
     title = "Scorecards for the Eurovision 2022 Finalists",
     caption = "Points awarded over time to each country whose artists competed in the 2022 Eurovision Grand Final"
