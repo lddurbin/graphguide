@@ -10,7 +10,6 @@ my_data <- board_url(c("eurovision" = "https://raw.githubusercontent.com/rfordat
 eurovision_df <- my_data |> 
   pin_download("eurovision") |> 
   readr::read_csv(show_col_types = FALSE) |> 
-  tibble::as_tibble() |> 
   filter(section == "grand-final")
 
 eurovision_2022 <- eurovision_df |> 
@@ -28,7 +27,7 @@ eurovision <- eurovision_df |>
     x_pos = min(year)+years(earliest_year),
     y_pos = max(total_points, na.rm = TRUE)*1.5,
     yoy_perc_2022_formatted = scales::label_percent(accuracy = 1, big.mark = ",")(yoy_perc_2022),
-    yoy_perc_2022_formatted = if_else(yoy_perc_2022_formatted == Inf, "", paste0("YoY: ", yoy_perc_2022_formatted)),
+    yoy_perc_2022_formatted = if_else(yoy_perc_2022_formatted == Inf, "YoY: --", paste0("YoY: ", yoy_perc_2022_formatted)),
     area_fill = case_when(
       artist_country == "Ukraine" ~ "yellow",
       TRUE ~ "blue"
@@ -70,4 +69,4 @@ plot <- ggplot(eurovision) +
     plot.margin=unit(rep(0.3,4), 'cm')
   )
 
-ggsave("eurovision_BANs.png", plot = plot, device = "png", path = path, bg = "white")
+ggsave("eurovision_BANs.png", plot = plot, device = "png", path = path, bg = "white", width = 14, height = 10)
