@@ -6,7 +6,7 @@ library(tidyr, warn.conflicts = FALSE)
 library(ggtext, warn.conflicts = FALSE)
 
 # Source: https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-data-and-statistics/covid-19-vaccine-data
-vaccinations <- read_excel(here::here("lines/covid_vaccinations_12_10_2021-v2.xlsx"), sheet = 5) %>% 
+vaccinations <- read_excel(here::here("R/lines/covid_vaccinations_12_10_2021-v2.xlsx"), sheet = 5) %>% 
   clean_names() %>% 
   pivot_longer(2:3, names_to = "dose") %>% 
   mutate(date = as.Date(date))
