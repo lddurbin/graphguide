@@ -1,9 +1,9 @@
-library(dplyr, warn.conflicts = FALSE)
-library(readxl, warn.conflicts = FALSE)
-library(janitor, warn.conflicts = FALSE)
-library(ggplot2, warn.conflicts = FALSE)
-library(tidyr, warn.conflicts = FALSE)
-library(ggtext, warn.conflicts = FALSE)
+library(dplyr) # A Grammar of Data Manipulation
+library(readxl) # Read Excel Files
+library(janitor) # Simple Tools for Examining and Cleaning Dirty Data
+library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
+library(tidyr) # Tidy Messy Data
+library(ggtext) # Improved Text Rendering Support for 'ggplot2'
 
 # Source: https://www.health.govt.nz/our-work/diseases-and-conditions/covid-19-novel-coronavirus/covid-19-data-and-statistics/covid-19-vaccine-data
 vaccinations <- read_excel(here::here("R/lines/covid_vaccinations_12_10_2021-v2.xlsx"), sheet = 5) %>% 
