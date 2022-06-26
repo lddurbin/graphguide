@@ -22,13 +22,14 @@ plot <- ggplot(data = species_loss) +
   geom_image(
     aes(x = .04275, y = taxonomic_group, image = image_path),
     size = 0.1725, by = "height") +
+  scale_x_continuous(limits = c(-0.075,.6)) +
   theme_void() +
   theme(
     legend.position = "none",
     plot.title.position = "plot",
     plot.title = element_text(size=32),
     plot.caption = element_text(size=14),
-    axis.text.y = element_text(size = 18),
+    axis.text.y = element_text(size = 22, hjust = 0.5),
     plot.margin = margin(0.75, 0.75, 0.75, 0.75, "cm")
   ) +
   labs(
