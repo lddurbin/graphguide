@@ -46,7 +46,6 @@ plot <- ggplot(ranked_districts, aes(x = year, y = rank, group = district, label
   ) +
   labs(
     title = "The fall and rise of <span style='color:orange'>**Hawke's Bay**</span> pies: although no longer the best outside of Auckland, bakeries<br>in <span style='color:orange'>**Hawke's Bay**</span> are still churning out some of the finest pies in Aotearoa",
-    # subtitle = "Although no longer the best outside of Auckland, bakeries in Hawke's Bay are still churning out some of the finest pies in Aotearoa",
     subtitle = "New Zealand's districts ranked by number of award-winning pies"
   )
 
