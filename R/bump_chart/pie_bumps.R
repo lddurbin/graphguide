@@ -1,7 +1,6 @@
 library(googlesheets4) # Access Google Sheets using the Sheets API V4
 library(dplyr) # A Grammar of Data Manipulation
 library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
-library(RColorBrewer) # ColorBrewer Palettes
 library(ggtext) # Improved Text Rendering Support for 'ggplot2'
 library(ggimage) # Use Image in 'ggplot2'
 
@@ -49,4 +48,4 @@ plot <- ggplot(ranked_districts, aes(x = year, y = rank, group = district, label
     subtitle = "New Zealand's districts ranked by number of award-winning pies"
   )
 
-ggsave(filename = "pies_ranked.png", plot = plot, device = "png", path = path, bg = "white")
+ggsave(filename = "pies_ranked.png", plot = plot, device = "png", path = path, bg = "white", width = 14, height = 10)
