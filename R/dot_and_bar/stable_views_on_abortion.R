@@ -1,6 +1,7 @@
 library(dplyr) # A Grammar of Data Manipulation
 library(ggplot2) # Create Elegant Data Visualisations Using the Grammar of Graphics
 library(stringr) # Simple, Consistent Wrappers for Common String Operations
+library(ggtext) # Improved Text Rendering Support for 'ggplot2'
 
 # read a CSV file, clean the column names
 read_data <- function(filepath) {
@@ -56,12 +57,13 @@ ggplot(data_to_viz) +
   coord_flip() +
   theme_void() +
   theme(
-    axis.text = element_text(size=12, hjust=1),
+    axis.text = element_text(size=14, hjust=1),
     panel.grid.major.x = element_line(size = 0.5, colour="light grey"),
     plot.title.position = "plot",
-    plot.title = element_text(size=20, margin = margin(0.25,0,0.1,4, unit="cm")),
+    plot.title = element_markdown(size=20),
     plot.margin = margin(0.2,0.2,0.2,0.5, unit="cm")
   ) +
   labs(
-    title = "Support among Americans for a woman's right to choose is the highest it's ever been, and\nopinions about abortion haven't varied much over the decades"
+    title = "Support in <span style='color:blue'>2022</span> among Americans for a woman's right to choose is the highest it's<br>ever been, and opinions about abortion haven't varied much <span style='color:gray65'>over the decades</span>"
   )
+

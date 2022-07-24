@@ -1,0 +1,64 @@
+---
+title: "Unequal Pay"
+format: html
+editor: visual
+---
+
+
+```{r}
+#| echo: false
+#| warning: false
+library(dplyr)
+library(readxl)
+library(waffle)
+
+path <- here::here("R/waffles")
+
+make_waffle <- function(rate_pos, title_text) {
+  waffle(
+    c(
+      (equal_pay$rate[[rate_pos]])*100,
+      (1-equal_pay$rate[[rate_pos]])*100
+    ),
+    rows = 10,
+    colors = if(rate_pos == 6) c("#E1E1E1", "#E1E1E1") else c("#000E3E", "#E1E1E1"),
+    title = title_text,
+    legend_pos = "none"
+  )
+}
+
+equal_pay <- read_excel(fs::dir_ls(path = path, glob = "*.xlsx"), .name_repair = janitor::make_clean_names) |> 
+  add_row(
+    group = "White men",
+    rate = 1,
+    equal_pay_day = lubridate::ymd_hms("2022-01-01-00:00:00")
+  )
+
+waffles <- purrr::map2(
+  1:6,
+  c(
+    "Asian American / Native Hawaiian\n/ Pacific Islander women earn 75\ncents to the White male dollar",
+    "Black women earn 58 cents to\nthe White male dollar",
+    "Indigenous women earn 50 cents to\nthe White male dollar",
+    "Latina women earn 49 cents to\nthe White male dollar",
+    "Women earn 83 cents to the White male dollar",
+    "Each square below makes up a dollar\nearned by a White male in 2021"
+  ),
+  make_waffle
+)
+```
+
+
+
+```{r}
+#| echo: false
+
+waffles[[6]]
+
+waffles[[4]]
+waffles[[3]]
+waffles[[2]]
+waffles[[1]]
+
+```
+
