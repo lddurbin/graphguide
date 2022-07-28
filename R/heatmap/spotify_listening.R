@@ -19,9 +19,11 @@ make_heatmap <- function(fill_value) {
     )
 }
 
-podcasts <- readRDS("podcasts.rds")
+path <- here::here("R/heatmap")
 
-scrobbles <- map(fs::dir_ls(glob = "*.json"), jsonlite::fromJSON) %>%
+podcasts <- readRDS(fs::dir_ls(path, glob = "*.rds"))
+
+scrobbles <- map(fs::dir_ls(path = path, glob = "*.json"), jsonlite::fromJSON) %>%
   bind_rows() %>% 
   tibble() %>% 
   filter(msPlayed > 0 & !artistName %in% podcasts) %>% 

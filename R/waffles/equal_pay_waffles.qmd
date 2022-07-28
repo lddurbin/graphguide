@@ -4,7 +4,6 @@ format: html
 editor: visual
 ---
 
-
 ```{r}
 #| echo: false
 #| warning: false
@@ -48,17 +47,14 @@ waffles <- purrr::map2(
 )
 ```
 
-
-
 ```{r}
 #| echo: false
 
 waffles[[6]]
 
-waffles[[4]]
-waffles[[3]]
-waffles[[2]]
 waffles[[1]]
+waffles[[2]]
+waffles[[3]]
+waffles[[4]]
 
 ```
-
