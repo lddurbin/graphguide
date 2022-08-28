@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Lee Durbin">
+
+<title>How to Make a Bad Graph a Better One</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="graph_makeover_files/libs/clipboard/clipboard.min.js"></script>
+<script src="graph_makeover_files/libs/quarto-html/quarto.js"></script>
+<script src="graph_makeover_files/libs/quarto-html/popper.min.js"></script>
+<script src="graph_makeover_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="graph_makeover_files/libs/quarto-html/anchor.min.js"></script>
+<link href="graph_makeover_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="graph_makeover_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="graph_makeover_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="graph_makeover_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="graph_makeover_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="graph_makeover_files/libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="graph_makeover_files/libs/d3-bundle-5.16.0/d3-bundle.min.js"></script>
+<script src="graph_makeover_files/libs/d3-lasso-0.0.5/d3-lasso.min.js"></script>
+<script src="graph_makeover_files/libs/save-svg-as-png-1.4.17/save-svg-as-png.min.js"></script>
+<link href="graph_makeover_files/libs/ggiraphjs-0.4.2/ggiraphjs.min.css" rel="stylesheet">
+<script src="graph_makeover_files/libs/ggiraphjs-0.4.2/ggiraphjs.min.js"></script>
+<script src="graph_makeover_files/libs/girafe-binding-0.8.2/girafe.js"></script>
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Navigation</h2>
+   
+  <ul>
+  <li><a href="#how-can-we-improve-this-graph" id="toc-how-can-we-improve-this-graph" class="nav-link active" data-scroll-target="#how-can-we-improve-this-graph">How can we improve this graph?</a></li>
+  <li><a href="#making-assumptions" id="toc-making-assumptions" class="nav-link" data-scroll-target="#making-assumptions">Making assumptions</a></li>
+  <li><a href="#making-it-better" id="toc-making-it-better" class="nav-link" data-scroll-target="#making-it-better">Making it better</a>
+  <ul class="collapse">
+  <li><a href="#title" id="toc-title" class="nav-link" data-scroll-target="#title">Title</a></li>
+  <li><a href="#chart-type" id="toc-chart-type" class="nav-link" data-scroll-target="#chart-type">Chart type</a></li>
+  <li><a href="#title-reprise" id="toc-title-reprise" class="nav-link" data-scroll-target="#title-reprise">Title Reprise</a></li>
+  <li><a href="#emphasise-the-point" id="toc-emphasise-the-point" class="nav-link" data-scroll-target="#emphasise-the-point">Emphasise the Point</a></li>
+  <li><a href="#boiling-it-right-down" id="toc-boiling-it-right-down" class="nav-link" data-scroll-target="#boiling-it-right-down">Boiling It Right Down</a></li>
+  </ul></li>
+  <li><a href="#so-which-chart-is-better" id="toc-so-which-chart-is-better" class="nav-link" data-scroll-target="#so-which-chart-is-better">So which chart is better?</a></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">How to Make a Bad Graph a Better One</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Lee Durbin </p>
+          </div>
+  </div>
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="how-can-we-improve-this-graph" class="level2">
+<h2 class="anchored" data-anchor-id="how-can-we-improve-this-graph">How can we improve this graph?</h2>
+<p>We’re going to look at a graph, taken from the Storytelling With Data website (<a href="https://community.storytellingwithdata.com/exercises/how-can-we-improve-this-graph" class="uri">https://community.storytellingwithdata.com/exercises/how-can-we-improve-this-graph</a>), and improve it step by step.</p>
+<p>Below is the data that forms the basis of the graph:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggiraph)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>hospital_stay <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tribble</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span><span class="st">"Quarter"</span>,  <span class="sc">~</span><span class="st">"&lt;=24"</span>,   <span class="sc">~</span><span class="st">"24 and 36"</span>,    <span class="sc">~</span><span class="st">"36 and 48"</span>, <span class="sc">~</span><span class="st">"48 and 59"</span>, <span class="sc">~</span><span class="st">"&gt;=60"</span>, <span class="sc">~</span><span class="st">"Unknown"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2019/Q1"</span>,     <span class="fl">0.122</span>,     <span class="fl">0.539</span>,           <span class="fl">0.063</span>,        <span class="fl">0.189</span>,          <span class="fl">0.069</span>,     <span class="fl">0.018</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2019/Q2"</span>,     <span class="fl">0.143</span>,     <span class="fl">0.583</span>,           <span class="fl">0.041</span>,        <span class="fl">0.167</span>,          <span class="fl">0.059</span>,     <span class="fl">0.007</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2019/Q3"</span>,     <span class="fl">0.195</span>,     <span class="fl">0.522</span>,           <span class="fl">0.028</span>,        <span class="fl">0.174</span>,          <span class="fl">0.07</span>,    <span class="fl">0.011</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"2019/Q4"</span>,     <span class="fl">0.254</span>,     <span class="fl">0.503</span>,           <span class="fl">0.027</span>,        <span class="fl">0.144</span>,          <span class="fl">0.056</span>,   <span class="fl">0.017</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">gt</span>(hospital_stay) <span class="sc">|&gt;</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Surgeries: length of hospital stay"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+
+<div id="vnxiouisqx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#vnxiouisqx .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vnxiouisqx .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vnxiouisqx .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vnxiouisqx .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vnxiouisqx .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vnxiouisqx .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vnxiouisqx .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vnxiouisqx .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnxiouisqx .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vnxiouisqx .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vnxiouisqx .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vnxiouisqx .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vnxiouisqx .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnxiouisqx .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vnxiouisqx .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vnxiouisqx .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnxiouisqx .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vnxiouisqx .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnxiouisqx .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vnxiouisqx .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnxiouisqx .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vnxiouisqx .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vnxiouisqx .gt_left {
+  text-align: left;
+}
+
+#vnxiouisqx .gt_center {
+  text-align: center;
+}
+
+#vnxiouisqx .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vnxiouisqx .gt_font_normal {
+  font-weight: normal;
+}
+
+#vnxiouisqx .gt_font_bold {
+  font-weight: bold;
+}
+
+#vnxiouisqx .gt_font_italic {
+  font-style: italic;
+}
+
+#vnxiouisqx .gt_super {
+  font-size: 65%;
+}
+
+#vnxiouisqx .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#vnxiouisqx .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#vnxiouisqx .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vnxiouisqx .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#vnxiouisqx .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#vnxiouisqx .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="7" class="gt_heading gt_title gt_font_normal gt_bottom_border" style="">Surgeries: length of hospital stay</th>
+    </tr>
+    
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">Quarter</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">&lt;=24</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">24 and 36</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">36 and 48</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">48 and 59</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">&gt;=60</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">Unknown</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">2019/Q1</td>
+<td class="gt_row gt_right">0.122</td>
+<td class="gt_row gt_right">0.539</td>
+<td class="gt_row gt_right">0.063</td>
+<td class="gt_row gt_right">0.189</td>
+<td class="gt_row gt_right">0.069</td>
+<td class="gt_row gt_right">0.018</td></tr>
+    <tr><td class="gt_row gt_left">2019/Q2</td>
+<td class="gt_row gt_right">0.143</td>
+<td class="gt_row gt_right">0.583</td>
+<td class="gt_row gt_right">0.041</td>
+<td class="gt_row gt_right">0.167</td>
+<td class="gt_row gt_right">0.059</td>
+<td class="gt_row gt_right">0.007</td></tr>
+    <tr><td class="gt_row gt_left">2019/Q3</td>
+<td class="gt_row gt_right">0.195</td>
+<td class="gt_row gt_right">0.522</td>
+<td class="gt_row gt_right">0.028</td>
+<td class="gt_row gt_right">0.174</td>
+<td class="gt_row gt_right">0.070</td>
+<td class="gt_row gt_right">0.011</td></tr>
+    <tr><td class="gt_row gt_left">2019/Q4</td>
+<td class="gt_row gt_right">0.254</td>
+<td class="gt_row gt_right">0.503</td>
+<td class="gt_row gt_right">0.027</td>
+<td class="gt_row gt_right">0.144</td>
+<td class="gt_row gt_right">0.056</td>
+<td class="gt_row gt_right">0.017</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Now let’s study the visual:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>hosital_stay_reshaped <span class="ot">&lt;-</span> hospital_stay <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">col =</span> <span class="sc">-</span>Quarter) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="fu">factor</span>(</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      name,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"&lt;=24"</span>, <span class="st">"24 and 36"</span>, <span class="st">"36 and 48"</span>, <span class="st">"48 and 59"</span>, <span class="st">"&gt;=60"</span>, <span class="st">"Unknown"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      ),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> stringr<span class="sc">::</span><span class="fu">str_sub</span>(Quarter, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span> <span class="fu">as.double</span>(),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">emphasis =</span> <span class="fu">if_else</span>(name <span class="sc">==</span> <span class="st">"&lt;=24"</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">tooltip =</span> <span class="fu">paste0</span>(Quarter, <span class="st">": "</span>, scales<span class="sc">::</span><span class="fu">label_percent</span>(<span class="at">accuracy=</span><span class="dv">1</span>)(value))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>fill_values <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;=24"</span> <span class="ot">=</span> <span class="st">"#4F81BD"</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"24 and 36"</span> <span class="ot">=</span> <span class="st">"#C04F4D"</span>,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"36 and 48"</span> <span class="ot">=</span> <span class="st">"#9BBB59"</span>,</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"48 and 59"</span> <span class="ot">=</span> <span class="st">"#8064A2"</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&gt;=60"</span> <span class="ot">=</span> <span class="st">"#4BACC6"</span>,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Unknown"</span> <span class="ot">=</span> <span class="st">"#F79646"</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>original <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> hosital_stay_reshaped,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> Quarter, <span class="at">y =</span> value, <span class="at">fill =</span> forcats<span class="sc">::</span><span class="fu">fct_rev</span>(name))</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"stack"</span>, <span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">width =</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> fill_values) <span class="sc">+</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span>percent,</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">2</span>, .<span class="dv">4</span>, .<span class="dv">6</span>, .<span class="dv">8</span>, <span class="fl">1.0</span>),</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">18</span>),</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">colour =</span> <span class="st">"black"</span>),</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"#BFBFBF"</span>),</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="fl">0.3</span>,<span class="fl">0.75</span>,<span class="fl">0.3</span>,<span class="fl">0.3</span>,<span class="st">"cm"</span>),</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face =</span> <span class="st">"bold"</span>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Surgeries: length of hospital stay"</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>original</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="making-assumptions" class="level2">
+<h2 class="anchored" data-anchor-id="making-assumptions">Making assumptions</h2>
+<p>When I look at this chart, before I even get into the specifics I first have two key questions:</p>
+<ul>
+<li>Who is the audience for this graph?</li>
+<li>What is the point of this graph?</li>
+</ul>
+<p>Now, we have to make assumptions about the audience for the purpose of this exercise: so let’s assume this is designed to inform the executive leadership team at a hospital.</p>
+<p>Ok, but what are we trying to tell them using this graph? Well, the data appears to be telling a success story: between Q1 and Q4 in 2019 the proportion of patients who stayed more than 24 hours in hospital after surgery decreased.</p>
+<p>Notice that I’m making further assumptions here: I assume that the categories are measuring hours, and I assume that what’s being measured is length of stay in hospital after surgery. In the absence of other evidence, these seem like reasonable assumptions to make.</p>
+</section>
+<section id="making-it-better" class="level2">
+<h2 class="anchored" data-anchor-id="making-it-better">Making it better</h2>
+<p>To quote from the Storytelling With Data website:</p>
+<blockquote class="blockquote">
+<p>Imagine the person who created this visual asks you for your opinion. What feedback might you provide to improve its effectiveness? Consider not only what you would change, but also why. What is the benefit of incorporating your points of critique?</p>
+</blockquote>
+<p>So we have an assumed audience (ELT at the hospital), and we have a narrative (in 2019 there was a quarter-on-quarter decline in post-surgery lengths of stay at the hospital). How can we improve the existing visual to communicate this point effectively to our assumed audience?</p>
+<section id="title" class="level3">
+<h3 class="anchored" data-anchor-id="title">Title</h3>
+<p>Let’s start at the top: with the title of the chart. There are two things that we can improve here: the position and content of that title.</p>
+<p>What’s wrong with the position? Well, many cultures around the world read from left to right, and that’s certainly true in the English-speaking world. <a href="https://www.storytellingwithdata.com/blog/2012/09/quick-tip-left-uppermost-align-title">Storytelling With Data’s very own Cole Knaflic</a> has written about the need to left-align graph titles, and <a href="https://web.archive.org/web/20130310105837/http://styleguide.yahoo.com/writing/write-web/eye-tracking-where-do-readers-look-first">research elsewhere</a> backs this up: put your titles on the top left, as that’s where your audience will look first.</p>
+<p>But why do we <em>want</em> our audience to read the title first anyway? It’s simple: in just a few short words, your title will tell them everything they need to know about the chart. Sometimes your audience will either be too busy to scrutinise your graph, or else they may not understand if even if they do. So think of your title as both a summary and a guide: it gives the reader the information they need to make a decsion (even if that decision is to ask for more data), <em>and</em> it gives them the information they need to understand what’s in the graph below. A good title is both self-sufficient and complementary.</p>
+<p>We’ll come back to the precise wording of this title once we’ve deconstructed the visuals beneath it a little further.</p>
+</section>
+<section id="chart-type" class="level3">
+<h3 class="anchored" data-anchor-id="chart-type">Chart type</h3>
+<p>The original graph is presented in the form of stacked bar charts, with time along the Y axis and the metric (share of post-operative patients) along the X axis. The categories, which split the bars into their coloured stacks, represent period of stay in hospital ranging from 24 hours or less to greater than or equal to 60 hours, with an additional category for “Unknown”.</p>
+<p>There are two drawbacks with representing change over time in this way: firstly, we have to read from bottom to top along the Y axis, and secondly we have to determine the change over that time by comparing the width of each segment in each row. This is a challenging exercise to undertake, but we can ease the cognitive load on the reader by making one simple adjustment: convert the stacked bar chart into a line chart.</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hosital_stay_reshaped,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> position, <span class="at">y =</span> value, <span class="at">group =</span> name)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="fl">2.5</span>) <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fl">4.3</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q2"</span>, <span class="st">"Q3"</span>, <span class="st">"Q4"</span>)) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">3</span>,.<span class="dv">4</span>,.<span class="dv">5</span>,.<span class="dv">6</span>), <span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map2</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">.x =</span> <span class="fu">c</span>(<span class="fl">0.017</span>, <span class="fl">0.027</span>, <span class="fl">0.056</span>, <span class="fl">0.144</span>, <span class="fl">0.254</span>, <span class="fl">0.503</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.y =</span> <span class="fu">c</span>(<span class="st">"Unknown"</span>, <span class="st">"36 and 48"</span>, <span class="st">"&gt;=60"</span>, <span class="st">"48 and 59"</span>, <span class="st">"&lt;=24"</span>, <span class="st">"24 and 36"</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> .x, <span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.2</span>, <span class="at">size=</span><span class="fl">5.5</span>, <span class="at">label =</span> .y)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Surgeries: length of hospital stay"</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">18</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>We can now see the change over time in each category more clearly, and the rise in the “&lt;=24” category stands out much more than it did in the stacked bar chart.</p>
+<p>Notice how I’ve also labelled the categories directly in the chart rather than add a legend, which saves us space in the visual and makes it easy for the reader to associate each line with its respective category.</p>
+<p>Because of my decision to label the lines directly, I was able to completely remove the colours from this chart for the time being. This is a useful thing to do as you iterate: make sure your chart works well in black and white first before you start introducing colours. This forces you to think carefully about how to use colour, layering colours onto the graph as needed but still adhering to standards of accessibility in your visual design.</p>
+<p>Finally, I’ve kept other visual elements to a minimum: only horizontal grid lines at each 10% mark, and simplifying the X-axis labels to “Q1”, “Q2” and so on. We’ll clarify which year we’re looking at later when we re-examine the content of our title (which, as you’ve probably noticed, is now left-aligned).</p>
+</section>
+<section id="title-reprise" class="level3">
+<h3 class="anchored" data-anchor-id="title-reprise">Title Reprise</h3>
+<p>Now that we’ve visualised the data in a way that makes the message a little clearer, let’s look again at the content of our title.</p>
+<p>The current title refers to “length of hospital stay”, but what we’re visualising is the proportion of post-operative patients who stay in hospital for varying lengths of time. Let’s spell this out in our title as so:</p>
+<blockquote class="blockquote">
+<p>The share of patients who stayed in hospital after surgery by length of stay</p>
+</blockquote>
+<p>This is ok I guess, but it’s still a bit confusing. More importantly, it says little about the <em>point</em> of this graph: what am I looking at here? Why should I care?</p>
+<p>Let’s try again:</p>
+<blockquote class="blockquote">
+<p>In 2019, the share of patients who stayed in hospital for less than 24 hours after surgey increased between Q1 and Q4</p>
+</blockquote>
+<p>This is better: not only is this title telling us the key point, it’s also telling us that we’re looking at data about 2019 here (a detail we decided to remove from the graph). We could reflect on this title further and make further improvements, but let’s move on for now and take another look at the graph.</p>
+</section>
+<section id="emphasise-the-point" class="level3">
+<h3 class="anchored" data-anchor-id="emphasise-the-point">Emphasise the Point</h3>
+<p>We now have a chart that makes sense for what we’re trying to say about our data, and we’ve written a title that tells the audience what they need to know. This is already an improvement on what we started with, but we can do better: we need to draw the reader’s attention to what’s important in the graph, and de-emphasise what’s less important.</p>
+<p>Here’s one way of achieving this:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hosital_stay_reshaped,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> position, <span class="at">y =</span> value, <span class="at">group =</span> name)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">colour =</span> emphasis), <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point_interactive</span>(<span class="fu">aes</span>(<span class="at">tooltip =</span> tooltip), <span class="at">size=</span><span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="fl">4.3</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q2"</span>, <span class="st">"Q3"</span>, <span class="st">"Q4"</span>)) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">3</span>,.<span class="dv">4</span>,.<span class="dv">5</span>,.<span class="dv">6</span>), <span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#d9ded6"</span>, <span class="st">"#f3a144"</span>)) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map2</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.x =</span> <span class="fu">c</span>(<span class="fl">0.012</span>, <span class="fl">0.031</span>, <span class="fl">0.056</span>, <span class="fl">0.144</span>, <span class="fl">0.254</span>, <span class="fl">0.503</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">.y =</span> <span class="fu">c</span>(<span class="st">"Unknown"</span>, <span class="st">"36 and 48"</span>, <span class="st">"&gt;=60"</span>, <span class="st">"48 and 59"</span>, <span class="st">"&lt;=24"</span>, <span class="st">"24 and 36"</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">.f =</span> <span class="sc">~</span><span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> .x, <span class="at">hjust=</span><span class="sc">-</span><span class="fl">0.1575</span>, <span class="at">size=</span><span class="fl">3.5</span>, <span class="at">label =</span> .y)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"In 2019, the share of patients who stayed in hospital for &lt;span style='color:#f3a144'&gt;less&lt;br&gt;than 24 hours&lt;/span&gt; after surgey increased between Q1 and Q4"</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">size=</span><span class="dv">16</span>),</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">10</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">girafe</span>(<span class="at">ggobj =</span> plot)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="fu">girafe_options</span>(</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  x,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">opts_toolbar</span>(<span class="at">saveaspng =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div id="htmlwidget-4554d0e074f8846655a9" style="width:100%;height:464px;" class="girafe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4554d0e074f8846655a9">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' id='svg_2a174246-9153-4bdd-a273-818bb2e39be4' viewBox='0 0 432 360'>\n <defs>\n  <clipPath id='svg_2a174246-9153-4bdd-a273-818bb2e39be4_c1'>\n   <rect x='0' y='0' width='432' height='360'/>\n  <\/clipPath>\n  <clipPath id='svg_2a174246-9153-4bdd-a273-818bb2e39be4_c2'>\n   <rect x='30.42' y='40.98' width='396.1' height='299.21'/>\n  <\/clipPath>\n <\/defs>\n <g>\n  <g clip-path='url(#svg_2a174246-9153-4bdd-a273-818bb2e39be4_c1)'>\n   <rect x='0' y='0' width='432' height='360' fill='#FFFFFF' stroke='#FFFFFF' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round'/>\n  <\/g>\n  <g clip-path='url(#svg_2a174246-9153-4bdd-a273-818bb2e39be4_c2)'>\n   <polyline points='30.42,329.90 426.52,329.90' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,282.67 426.52,282.67' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,235.45 426.52,235.45' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,188.23 426.52,188.23' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,141.00 426.52,141.00' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,93.78 426.52,93.78' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='30.42,46.56 426.52,46.56' fill='none' stroke='#EBEBEB' stroke-width='1.07' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,272.29 157.54,262.37 266.66,237.81 375.78,209.95' fill='none' stroke='#F3A144' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,75.36 157.54,54.58 266.66,83.39 375.78,92.36' fill='none' stroke='#D9DED6' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,300.15 157.54,310.54 266.66,316.68 375.78,317.15' fill='none' stroke='#D9DED6' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,240.65 157.54,251.03 266.66,247.73 375.78,261.90' fill='none' stroke='#D9DED6' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,297.31 157.54,302.04 266.66,296.84 375.78,303.45' fill='none' stroke='#D9DED6' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='48.42,321.40 157.54,326.59 266.66,324.70 375.78,321.87' fill='none' stroke='#D9DED6' stroke-width='4.27' stroke-linejoin='round' stroke-linecap='butt'/>\n   <circle cx='48.42' cy='272.29' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 12%'/>\n   <circle cx='48.42' cy='75.36' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 54%'/>\n   <circle cx='48.42' cy='300.15' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 6%'/>\n   <circle cx='48.42' cy='240.65' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 19%'/>\n   <circle cx='48.42' cy='297.31' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 7%'/>\n   <circle cx='48.42' cy='321.4' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q1: 2%'/>\n   <circle cx='157.54' cy='262.37' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 14%'/>\n   <circle cx='157.54' cy='54.58' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 58%'/>\n   <circle cx='157.54' cy='310.54' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 4%'/>\n   <circle cx='157.54' cy='251.03' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 17%'/>\n   <circle cx='157.54' cy='302.04' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 6%'/>\n   <circle cx='157.54' cy='326.59' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q2: 1%'/>\n   <circle cx='266.66' cy='237.81' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 20%'/>\n   <circle cx='266.66' cy='83.39' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 52%'/>\n   <circle cx='266.66' cy='316.68' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 3%'/>\n   <circle cx='266.66' cy='247.73' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 17%'/>\n   <circle cx='266.66' cy='296.84' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 7%'/>\n   <circle cx='266.66' cy='324.7' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q3: 1%'/>\n   <circle cx='375.78' cy='209.95' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 25%'/>\n   <circle cx='375.78' cy='92.36' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 50%'/>\n   <circle cx='375.78' cy='317.15' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 3%'/>\n   <circle cx='375.78' cy='261.9' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 14%'/>\n   <circle cx='375.78' cy='303.45' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 6%'/>\n   <circle cx='375.78' cy='321.87' r='1.87pt' fill='#000000' stroke='#000000' stroke-width='0.71' stroke-linejoin='round' stroke-linecap='round' title='2019/Q4: 2%'/>\n   <text x='382.32' y='327.8' font-size='7.47pt' font-family='Helvetica'>Unknown<\/text>\n   <text x='382.76' y='318.83' font-size='7.47pt' font-family='Helvetica'>36 and 48<\/text>\n   <text x='379.35' y='307.02' font-size='7.47pt' font-family='Helvetica'>&gt;=60<\/text>\n   <text x='382.76' y='265.47' font-size='7.47pt' font-family='Helvetica'>48 and 59<\/text>\n   <text x='379.35' y='213.52' font-size='7.47pt' font-family='Helvetica'>&lt;=24<\/text>\n   <text x='382.76' y='95.93' font-size='7.47pt' font-family='Helvetica'>24 and 36<\/text>\n  <\/g>\n  <g clip-path='url(#svg_2a174246-9153-4bdd-a273-818bb2e39be4_c1)'>\n   <text x='11.04' y='333.49' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>0%<\/text>\n   <text x='5.48' y='286.26' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>10%<\/text>\n   <text x='5.48' y='239.04' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>20%<\/text>\n   <text x='5.48' y='191.82' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>30%<\/text>\n   <text x='5.48' y='144.59' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>40%<\/text>\n   <text x='5.48' y='97.37' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>50%<\/text>\n   <text x='5.48' y='50.14' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>60%<\/text>\n   <text x='41.76' y='352.3' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>Q1<\/text>\n   <text x='150.88' y='352.3' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>Q2<\/text>\n   <text x='259.99' y='352.3' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>Q3<\/text>\n   <text x='369.11' y='352.3' font-size='7.5pt' font-family='Helvetica' fill='#4D4D4D'>Q4<\/text>\n   <text x='5.48' y='16.96' font-size='12pt' font-family='Helvetica'>In<\/text>\n   <text x='23.26' y='16.96' font-size='12pt' font-family='Helvetica'>2019,<\/text>\n   <text x='67.75' y='16.96' font-size='12pt' font-family='Helvetica'>the<\/text>\n   <text x='94.43' y='16.96' font-size='12pt' font-family='Helvetica'>share<\/text>\n   <text x='138.9' y='16.96' font-size='12pt' font-family='Helvetica'>of<\/text>\n   <text x='156.68' y='16.96' font-size='12pt' font-family='Helvetica'>patients<\/text>\n   <text x='217.16' y='16.96' font-size='12pt' font-family='Helvetica'>who<\/text>\n   <text x='250.96' y='16.96' font-size='12pt' font-family='Helvetica'>stayed<\/text>\n   <text x='302.54' y='16.96' font-size='12pt' font-family='Helvetica'>in<\/text>\n   <text x='319.44' y='16.96' font-size='12pt' font-family='Helvetica'>hospital<\/text>\n   <text x='379.03' y='16.96' font-size='12pt' font-family='Helvetica'>for<\/text>\n   <text x='402.14' y='16.96' font-size='12pt' font-family='Helvetica' fill='#F3A144'>less<\/text>\n   <text x='5.48' y='31.97' font-size='12pt' font-family='Helvetica' fill='#F3A144'>than<\/text>\n   <text x='41.06' y='31.97' font-size='12pt' font-family='Helvetica' fill='#F3A144'>24<\/text>\n   <text x='63.3' y='31.97' font-size='12pt' font-family='Helvetica' fill='#F3A144'>hours<\/text>\n   <text x='107.77' y='31.97' font-size='12pt' font-family='Helvetica'>after<\/text>\n   <text x='144.22' y='31.97' font-size='12pt' font-family='Helvetica'>surgey<\/text>\n   <text x='196.69' y='31.97' font-size='12pt' font-family='Helvetica'>increased<\/text>\n   <text x='270.51' y='31.97' font-size='12pt' font-family='Helvetica'>between<\/text>\n   <text x='335.45' y='31.97' font-size='12pt' font-family='Helvetica'>Q1<\/text>\n   <text x='361.24' y='31.97' font-size='12pt' font-family='Helvetica'>and<\/text>\n   <text x='392.38' y='31.97' font-size='12pt' font-family='Helvetica'>Q4<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_2a174246-9153-4bdd-a273-818bb2e39be4","ratio":1.2,"settings":{"tooltip":{"css":".tooltip_SVGID_ { padding:5px;background:black;color:white;border-radius:2px 2px 2px 2px;text-align:left; ; position:absolute;pointer-events:none;z-index:999;}","placement":"doc","offx":10,"offy":0,"use_cursor_pos":true,"opacity":0.9,"usefill":false,"usestroke":false,"delay":{"over":200,"out":500}},"hover":{"css":".hover_SVGID_ { fill:orange;stroke:gray; }","reactive":false},"hoverkey":{"css":".hover_key_SVGID_ { stroke:red; }","reactive":false},"hovertheme":{"css":".hover_theme_SVGID_ { fill:green; }","reactive":false},"hoverinv":{"css":""},"zoom":{"min":1,"max":1},"capture":{"css":".selected_SVGID_ { fill:red;stroke:gray; }","type":"multiple","only_shiny":true,"selected":[]},"capturekey":{"css":".selected_key_SVGID_ { stroke:gray; }","type":"single","only_shiny":true,"selected":[]},"capturetheme":{"css":".selected_theme_SVGID_ { stroke:gray; }","type":"single","only_shiny":true,"selected":[]},"toolbar":{"position":"topright","saveaspng":false,"pngname":"diagram"},"sizing":{"rescale":true,"width":1}}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>By thoughtfully introducing some colour into our graph, we’ve drawn attention to the line that matters (“&lt;=24”) by highlighting it in orange. We’ve simultaneously de-emphasised the lines that matter less by making them grey; they’re still there, but that’s not where the reader’s attention is drawn.</p>
+<p>As an added touch, we’ve added the same orange colour to some of the text in our title: this instantly creates the necessary association between a detail in the title and a detail in the visual.</p>
+<p>Although not crucial here, we’ve also added tooltips when the user hovers over the points so they can read the precise values if necessary.</p>
+</section>
+<section id="boiling-it-right-down" class="level3">
+<h3 class="anchored" data-anchor-id="boiling-it-right-down">Boiling It Right Down</h3>
+<p>Let’s review what we’ve done so far:</p>
+<ul>
+<li>We chose an appropriate chart type to show change over time</li>
+<li>We fine-tuned our title so it tells the reader what they need to know</li>
+<li>We emphasised the point of our graph by thoughtfully introducing colour</li>
+</ul>
+<p>We can call it a day at this point: we’ve designed a perfectly respectable visual to communicate a clear message to an assumed audience. However, I still feel like we can go further, even though it requires making further assumptions. Because this is just an exercise, we can safely make such assumptions here.</p>
+<p>Let’s assume that ELT set a goal for 2019: they wanted more than a quarter of all patients discharged from the hospital within a day of surgery. Setting aside the wisdom of such a target, let’s re-visit our chart to answer the question: by the end of 2019, were more than 25% of patients discharged from hospital within a day after surgery?</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>area <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> hosital_stay_reshaped <span class="sc">|&gt;</span> <span class="fu">filter</span>(name <span class="sc">==</span> <span class="st">"&lt;=24"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> position, <span class="at">y =</span> value)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_area</span>(<span class="at">fill =</span> <span class="st">"#99f4f8"</span>) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> scales<span class="sc">::</span>percent,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">35</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">05</span>,.<span class="dv">15</span>,.<span class="dv">25</span>,.<span class="dv">35</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q2"</span>, <span class="st">"Q3"</span>, <span class="st">"Q4"</span>)) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"By the end of 2019, more than a quarter of patients were being discharged from</span><span class="sc">\n</span><span class="st">hospital within a day of completing surgery"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Share of all post-operative patients whose hospital stayed lasted 24 hours or less"</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title.position =</span> <span class="st">"plot"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">20</span>),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>),</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>area</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>We’ve really boiled it right down here: stripping away all other data points, we focus entirely on the trend for the “&lt;=24” category, expressing it as a simple area chart. For some this level of minimalism might be a step too far, and if that’s the case we can either provide a data table for the detail or try a slightly different approach as seen below:</p>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>hospital_stay_aggregated <span class="ot">&lt;-</span> hospital_stay <span class="sc">|&gt;</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">more_than_a_day =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>)),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">more_than_two_days =</span> <span class="fu">rowSums</span>(<span class="fu">across</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>)),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">quarter =</span> <span class="fu">word</span>(Quarter, <span class="dv">2</span>, <span class="at">sep =</span> <span class="fu">fixed</span>(<span class="st">"/"</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(quarter, <span class="at">a_day_or_less =</span> <span class="st">"&lt;=24"</span>, more_than_a_day, more_than_two_days) <span class="sc">|&gt;</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(quarter <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q4"</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> quarter, <span class="at">values_from =</span> value) <span class="sc">|&gt;</span> </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">name =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    name <span class="sc">==</span> <span class="st">"a_day_or_less"</span> <span class="sc">~</span> <span class="st">"A day</span><span class="sc">\n</span><span class="st">or less:"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    name <span class="sc">==</span> <span class="st">"more_than_a_day"</span> <span class="sc">~</span> <span class="st">"More than a</span><span class="sc">\n</span><span class="st">day, less</span><span class="sc">\n</span><span class="st">than two:"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    name <span class="sc">==</span> <span class="st">"more_than_two_days"</span> <span class="sc">~</span> <span class="st">"Two days</span><span class="sc">\n</span><span class="st">or more:"</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>slopes <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> hospital_stay_aggregated) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> Q1, <span class="at">xend =</span> <span class="dv">1</span>, <span class="at">yend =</span> Q4, <span class="at">colour =</span> name), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> Q1), <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">0</span>, <span class="at">y =</span> Q1, <span class="at">colour =</span> name), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> Q4), <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="dv">1</span>, <span class="at">y =</span> Q4, <span class="at">colour =</span> name), <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="sc">-</span><span class="fl">0.095</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> Q1,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">paste0</span>(name, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, scales<span class="sc">::</span><span class="fu">percent</span>(Q1, <span class="at">accuracy =</span> <span class="fl">1.1</span>))),</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">6</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fl">1.065</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> Q4,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> scales<span class="sc">::</span><span class="fu">percent</span>(Q4, <span class="at">accuracy =</span> <span class="fl">1.1</span>)),</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">6</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">7</span>), <span class="at">labels =</span> scales<span class="sc">::</span>percent, <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">2</span>,.<span class="dv">4</span>,.<span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.15</span>,<span class="fl">1.07</span>), <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Q1"</span>, <span class="st">"Q4"</span>)) <span class="sc">+</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#f1a92b"</span>, <span class="st">"#99f4f8"</span>, <span class="st">"#c4efeb"</span>)) <span class="sc">+</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"By the end of 2019, more than a quarter of patients were being&lt;br&gt;discharged from hospital &lt;span style='color:#f1a92b'&gt;within a day of completing surgery&lt;/span&gt;"</span>,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Share of post-operative patients by length of hospital stay, excluding unknowns"</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">size=</span><span class="dv">24</span>),</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.minor.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">16</span>),</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>()</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>slopes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>The slope chart above returns some of the detail, although we’re still providing a degree of focus: we’re only showing Q1 and Q4, and we’ve aggregated the data to show hospital stays for a day or less, more than a day but less than two, and two days or more.</p>
+<p>As with the area chart, we can clearly see the sharp increase in the share of patients discharged after surgey in a day or less (something we’ve emphasised with a strong colour, one we’ve repeated in the title), but we have some additional context now with the other categories.</p>
+</section>
+</section>
+<section id="so-which-chart-is-better" class="level2">
+<h2 class="anchored" data-anchor-id="so-which-chart-is-better">So which chart is better?</h2>
+<p>We started with this…</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>And we ended up with this…</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>But also this…</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="graph_makeover_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<p>So which chart should we use?</p>
+<p>The answer is… either, neither, both, it depends.</p>
+<p>Infuriating, I know, but the fact is there’s no one correct way to go about the work of information visual design. Here, we’ve considered some options and built some visuals that might work… but ultimately it’s all about what works best for your audience. If our imagined ELT audience is looking for the end-of-year results as compared to an imagined 25% target then either our area chart or our slope chart would work fine. They’re not the <em>only</em> way to visualise this data, but I hope we can all agree they’re an improvement on what we started with.</p>
+<p>The rest is up to you.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
