@@ -9,7 +9,7 @@ library(ggtext, warn.conflicts = FALSE)
 
 # https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland
 get_the_data <- function(filename, sheet, sex) {
-  readxl::read_excel(here::here(paste0("back_to_back/", filename, ".xls")), sheet = sheet, skip = 7) %>% 
+  readxl::read_excel(here::here(paste0("R/back_to_back/", filename, ".xls")), sheet = sheet, skip = 7) %>% 
     filter(Name %in% c("WALES")) %>% 
     mutate(sex = sex) %>% 
     select(-c(1:4))
